@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  background: #293140;
+}
+div .body {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  width: 512px;
+  height: 512px;
+}
+
+.white {
+  width: 64px;
+  height: 64px;
+  background: rgba(237, 197, 176, 0.8);
+  color: black;
+}
+
+.black {
+  width: 64px;
+  height: 64px;
+  background: rgba(30, 15, 13, 0.8);
+  color: aliceblue;
+}
