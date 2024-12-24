@@ -23,9 +23,9 @@
 }
 
 .white {
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   width: 64px;
   height: 64px;
   background: rgba(237, 197, 176, 0.8);
@@ -33,9 +33,9 @@
 }
 
 .black {
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   width: 64px;
   height: 64px;
   background: rgba(30, 15, 13, 0.8);
@@ -50,3 +50,16 @@
   align-items: center;
   cursor: grab;
 }
+
+.id {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between; */
+}
+
+/* .id-str {
+  align-self: flex-start;
+}
+.id-num {
+  align-self: flex-end;
+} */
