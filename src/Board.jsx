@@ -7,7 +7,7 @@ export default function Board() {
   const [board, setBoard] = useState(createBoard);
   const [memoryCell, setMemoryCell] = useState();
   const [memoryBoard, setMemoryBoard] = useState();
-  const [motion, setMotion] = useState("white");
+  const [motion, setMotion] = useState("Нажмите кнопку начать игру");
 
   function createBoard() {
     const newBoard = [];
@@ -126,7 +126,7 @@ export default function Board() {
   const dropHandler = (e, cell) => {
     e.preventDefault();
     if (memoryCell.figure.color == e.target.className) {
-      setMotion("Нельзя побить свою фигуру");
+      console.log("Нельзя побить свою фигуру");
     } else {
       const newBoard = memoryBoard.map((inLine) =>
         inLine.map((inCell) => {
@@ -138,8 +138,8 @@ export default function Board() {
         })
       );
       setBoard(newBoard);
-      setMotion("");
     }
+    setMotion(memoryCell.figure.color);
     e.target.style.background = "";
     e.target.parentElement.style.background = "";
   };
@@ -154,10 +154,20 @@ export default function Board() {
     }
   };
 
+  const canMotion = (figure) => {
+    if (motion == "figure-white" && figure == "figure-black") {
+      return true;
+    } else if (motion == "figure-black" && figure == "figure-white") {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   function startGame() {
     setBoard(startPosition);
+    setMotion("figure-black");
   }
-
   return (
     <div
       style={{
@@ -194,9 +204,7 @@ export default function Board() {
                     onDragEnd={(e) => dragEndHandler(e)}
                     onDragOver={(e) => dragOverHandler(e)}
                     onDrop={(e) => dropHandler(e, cell)}
-                    draggable={
-                      cell.figure.color == "figure-white" ? true : false
-                    }
+                    draggable={canMotion(cell.figure.color)}
                     className={colorFigure(cell.figure.color)}
                     src={cell.figure.img}
                     alt=""
