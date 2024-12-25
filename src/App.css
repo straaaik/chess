@@ -6,13 +6,24 @@
 #root {
   background: rgb(43, 33, 24);
 }
-.body {
+.header {
+  width: 100%;
+  height: 50px;
+  background-color: rgb(201, 205, 208);
+}
+.body-chess {
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100vh;
+}
+
+.settings {
+  width: 100px;
+  height: 812px;
+  background-color: rgba(90, 228, 157, 0.327);
 }
 .board {
   display: flex;
@@ -60,6 +71,13 @@
   position: absolute;
   z-index: 1;
   color: brown;
+}
+
+.lose-board {
+  margin: 50px;
+  background: rgba(82, 49, 11, 0.664);
+  width: 512px;
+  height: 150px;
 }
 
 .id-str {

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import MyButton from "./UI/Button/MyButton";
 import { startPosition } from "./CreatePosition";
+import GameSettings from "./GameSettings";
 
 export default function Board() {
   const [board, setBoard] = useState(createBoard);
   const [memoryCell, setMemoryCell] = useState();
   const [memoryBoard, setMemoryBoard] = useState();
-  const [motion, setMotion] = useState("Ходят белые");
+  const [motion, setMotion] = useState("white");
 
   function createBoard() {
     const newBoard = [];
@@ -54,7 +55,21 @@ export default function Board() {
     return newBoard;
   }
 
-  function canMotion() {}
+  // function canMotion(color) {
+  //   if (motion == "белые") {
+  //     if (color == "black") {
+  //       return false;
+  //     }
+  //     setMotion("черные");
+  //   }
+  //   if (motion == "черные") {
+  //     if (color == "white") {
+  //       return false;
+  //     }
+  //     setMotion("белые");
+  //     return true;
+  //   }
+  // }
 
   const dragStartHandler = (e, cell) => {
     const newBoard = board.map((inLine) =>
@@ -77,24 +92,24 @@ export default function Board() {
     e.preventDefault();
     //Белые фигуры
     if (
-      memoryCell.figure.color == "white" &&
+      memoryCell.figure.color == "figure-white" &&
       e.target.className == "figure-black"
     )
       e.target.parentElement.style.background = "rgba(90, 233, 159, 0.858)";
 
     if (
-      memoryCell.figure.color == "white" &&
+      memoryCell.figure.color == "figure-white" &&
       e.target.className == "figure-white"
     )
       e.target.parentElement.style.background = "rgba(233, 90, 119, 0.858)";
     //Черные фигуры
     if (
-      memoryCell.figure.color == "black" &&
+      memoryCell.figure.color == "figure-black" &&
       e.target.className == "figure-white"
     )
       e.target.parentElement.style.background = "rgba(90, 233, 159, 0.858)";
     if (
-      memoryCell.figure.color == "black" &&
+      memoryCell.figure.color == "figure-black" &&
       e.target.className == "figure-black"
     )
       e.target.parentElement.style.background = "rgba(233, 90, 119, 0.858)";
@@ -110,69 +125,88 @@ export default function Board() {
 
   const dropHandler = (e, cell) => {
     e.preventDefault();
-    const newBoard = memoryBoard.map((inLine) =>
-      inLine.map((inCell) => {
-        if (inCell.id.id === cell.id.id) {
-          return { ...inCell, figure: memoryCell.figure };
-        } else {
-          return inCell;
-        }
-      })
-    );
+    if (memoryCell.figure.color == e.target.className) {
+      setMotion("Нельзя побить свою фигуру");
+    } else {
+      const newBoard = memoryBoard.map((inLine) =>
+        inLine.map((inCell) => {
+          if (inCell.id.id === cell.id.id) {
+            return { ...inCell, figure: memoryCell.figure };
+          } else {
+            return inCell;
+          }
+        })
+      );
+      setBoard(newBoard);
+      setMotion("");
+    }
     e.target.style.background = "";
     e.target.parentElement.style.background = "";
-    setBoard(newBoard);
   };
 
   const colorFigure = (color) => {
-    if (color == "white") {
+    if (color == "figure-white") {
       return "figure-white";
-    } else if (color == "black") {
+    } else if (color == "figure-black") {
       return "figure-black";
     } else {
       return "";
     }
   };
 
+  function startGame() {
+    setBoard(startPosition);
+  }
+
   return (
-    <div className="body">
-      <div style={{ color: "white" }}>{motion}</div>
-      <MyButton onClick={() => setBoard(startPosition(board))}>
-        Начать новую партию
-      </MyButton>
-      <div className="board">
-        {board.map((line) =>
-          line.map((cell) => (
-            <div key={cell.id.id}>
-              <div className="id">
-                <div className="id-str">
-                  {cell.id.num == 1 ? cell.id.char.toLocaleUpperCase() : ""}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <GameSettings start={startGame} />
+      <div className="body-chess">
+        <div>{motion}</div>
+        <div className="lose-board"></div>
+        <div className="board">
+          {board.map((line) =>
+            line.map((cell) => (
+              <div key={cell.id.id}>
+                <div className="id">
+                  <div className="id-str">
+                    {cell.id.num == 1 ? cell.id.char.toLocaleUpperCase() : ""}
+                  </div>
+                  <div className="id-num">
+                    {cell.id.char == "a" ? cell.id.num : ""}
+                  </div>
                 </div>
-                <div className="id-num">
-                  {cell.id.char == "a" ? cell.id.num : ""}
-                </div>
-              </div>
-              <div
-                className={cell.color}
-                onDragLeave={(e) => dragLeaveHandler(e)}
-                onDragOver={(e) => dragOverHandler(e)}
-                onDrop={(e) => dropHandler(e, cell)}
-              >
-                <img
-                  onDragStart={(e) => dragStartHandler(e, cell)}
+                <div
+                  className={cell.color}
                   onDragLeave={(e) => dragLeaveHandler(e)}
-                  onDragEnd={(e) => dragEndHandler(e)}
                   onDragOver={(e) => dragOverHandler(e)}
                   onDrop={(e) => dropHandler(e, cell)}
-                  draggable={true}
-                  className={colorFigure(cell.figure.color)}
-                  src={cell.figure.img}
-                  alt=""
-                />
+                >
+                  <img
+                    onDragStart={(e) => dragStartHandler(e, cell)}
+                    onDragLeave={(e) => dragLeaveHandler(e)}
+                    onDragEnd={(e) => dragEndHandler(e)}
+                    onDragOver={(e) => dragOverHandler(e)}
+                    onDrop={(e) => dropHandler(e, cell)}
+                    draggable={
+                      cell.figure.color == "figure-white" ? true : false
+                    }
+                    className={colorFigure(cell.figure.color)}
+                    src={cell.figure.img}
+                    alt=""
+                  />
+                </div>
               </div>
-            </div>
-          ))
-        )}
+            ))
+          )}
+        </div>
+        <div className="lose-board"></div>
       </div>
     </div>
   );
