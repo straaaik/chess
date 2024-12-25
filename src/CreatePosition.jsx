@@ -17,71 +17,71 @@ export function startPosition(board) {
     line.map((cell) => {
       switch (cell.id.id) {
         case "e1":
-          return { ...cell, figure: whiteKing };
+          return { ...cell, figure: { img: whiteKing, color: "white" } };
         case "e8":
-          return { ...cell, figure: blackKing };
+          return { ...cell, figure: { img: blackKing, color: "black" } };
         case "d1":
-          return { ...cell, figure: whiteQueen };
+          return { ...cell, figure: { img: whiteQueen, color: "white" } };
         case "d8":
-          return { ...cell, figure: blackQueen };
+          return { ...cell, figure: { img: blackQueen, color: "black" } };
         case "a1":
-          return { ...cell, figure: whiteRook };
+          return { ...cell, figure: { img: whiteRook, color: "white" } };
         case "h1":
-          return { ...cell, figure: whiteRook };
+          return { ...cell, figure: { img: whiteRook, color: "white" } };
         case "a8":
-          return { ...cell, figure: blackRook };
+          return { ...cell, figure: { img: blackRook, color: "black" } };
         case "h8":
-          return { ...cell, figure: blackRook };
+          return { ...cell, figure: { img: blackRook, color: "black" } };
         case "c1":
-          return { ...cell, figure: whiteBishop };
+          return { ...cell, figure: { img: whiteBishop, color: "white" } };
         case "f1":
-          return { ...cell, figure: whiteBishop };
+          return { ...cell, figure: { img: whiteBishop, color: "white" } };
         case "c8":
-          return { ...cell, figure: blackBishop };
+          return { ...cell, figure: { img: blackBishop, color: "black" } };
         case "f8":
-          return { ...cell, figure: blackBishop };
+          return { ...cell, figure: { img: blackBishop, color: "black" } };
         case "b1":
-          return { ...cell, figure: whiteKnight };
+          return { ...cell, figure: { img: whiteKnight, color: "white" } };
         case "g1":
-          return { ...cell, figure: whiteKnight };
+          return { ...cell, figure: { img: whiteKnight, color: "white" } };
         case "b8":
-          return { ...cell, figure: blackKnight };
+          return { ...cell, figure: { img: blackKnight, color: "black" } };
         case "g8":
-          return { ...cell, figure: blackKnight };
+          return { ...cell, figure: { img: blackKnight, color: "black" } };
         case "a2":
-          return { ...cell, figure: whitePawn };
+          return { ...cell, figure: { img: whitePawn, color: "white" } };
         case "b2":
-          return { ...cell, figure: whitePawn };
+          return { ...cell, figure: { img: whitePawn, color: "white" } };
         case "c2":
-          return { ...cell, figure: whitePawn };
+          return { ...cell, figure: { img: whitePawn, color: "white" } };
         case "d2":
-          return { ...cell, figure: whitePawn };
+          return { ...cell, figure: { img: whitePawn, color: "white" } };
         case "e2":
-          return { ...cell, figure: whitePawn };
+          return { ...cell, figure: { img: whitePawn, color: "white" } };
         case "f2":
-          return { ...cell, figure: whitePawn };
+          return { ...cell, figure: { img: whitePawn, color: "white" } };
         case "g2":
-          return { ...cell, figure: whitePawn };
+          return { ...cell, figure: { img: whitePawn, color: "white" } };
         case "h2":
-          return { ...cell, figure: whitePawn };
+          return { ...cell, figure: { img: whitePawn, color: "white" } };
         case "a7":
-          return { ...cell, figure: blackPawn };
+          return { ...cell, figure: { img: blackPawn, color: "black" } };
         case "b7":
-          return { ...cell, figure: blackPawn };
+          return { ...cell, figure: { img: blackPawn, color: "black" } };
         case "c7":
-          return { ...cell, figure: blackPawn };
+          return { ...cell, figure: { img: blackPawn, color: "black" } };
         case "d7":
-          return { ...cell, figure: blackPawn };
+          return { ...cell, figure: { img: blackPawn, color: "black" } };
         case "e7":
-          return { ...cell, figure: blackPawn };
+          return { ...cell, figure: { img: blackPawn, color: "black" } };
         case "f7":
-          return { ...cell, figure: blackPawn };
+          return { ...cell, figure: { img: blackPawn, color: "black" } };
         case "g7":
-          return { ...cell, figure: blackPawn };
+          return { ...cell, figure: { img: blackPawn, color: "black" } };
         case "h7":
-          return { ...cell, figure: blackPawn };
+          return { ...cell, figure: { img: blackPawn, color: "black" } };
         default:
-          return { ...cell, figure: null };
+          return { ...cell, figure: { img: null, color: "" } };
       }
     })
   );

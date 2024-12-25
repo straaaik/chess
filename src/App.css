@@ -23,43 +23,46 @@
 }
 
 .white {
-  /* display: flex;
+  display: flex;
   align-items: center;
-  justify-content: center; */
+  justify-content: center;
+  position: relative;
   width: 64px;
   height: 64px;
-  background: rgba(237, 197, 176, 0.8);
-  color: black;
+  background-color: rgba(237, 197, 176, 0.8);
 }
 
 .black {
-  /* display: flex;
+  display: flex;
   align-items: center;
-  justify-content: center; */
+  justify-content: center;
+  position: relative;
   width: 64px;
   height: 64px;
   background: rgba(30, 15, 13, 0.8);
-  color: aliceblue;
 }
 
-.figure {
+.figure-black {
   background-color: transparent;
-  /* position: absolute; */
   width: 45px;
   height: 45px;
-  align-items: center;
+  cursor: grab;
+}
+.figure-white {
+  background-color: transparent;
+  width: 45px;
+  height: 45px;
   cursor: grab;
 }
 
 .id {
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-between; */
+  display: flex;
+  position: absolute;
+  z-index: 1;
+  color: brown;
 }
 
-/* .id-str {
-  align-self: flex-start;
+.id-str {
 }
 .id-num {
-  align-self: flex-end;
-} */
+}
