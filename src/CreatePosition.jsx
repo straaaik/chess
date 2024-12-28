@@ -17,101 +17,167 @@ export function startPosition(board) {
     line.map((cell) => {
       switch (cell.id.id) {
         case "e1":
-          return { ...cell, figure: { img: whiteKing, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "king", img: whiteKing, color: "white" },
+          };
         case "e8":
-          return { ...cell, figure: { img: blackKing, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "king", img: blackKing, color: "black" },
+          };
         case "d1":
           return {
             ...cell,
-            figure: { img: whiteQueen, color: "figure-white" },
+            figure: { name: "queen", img: whiteQueen, color: "white" },
           };
         case "d8":
           return {
             ...cell,
-            figure: { img: blackQueen, color: "figure-black" },
+            figure: { name: "queen", img: blackQueen, color: "black" },
           };
         case "a1":
-          return { ...cell, figure: { img: whiteRook, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "rook", img: whiteRook, color: "white" },
+          };
         case "h1":
-          return { ...cell, figure: { img: whiteRook, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "rook", img: whiteRook, color: "white" },
+          };
         case "a8":
-          return { ...cell, figure: { img: blackRook, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "rook", img: blackRook, color: "black" },
+          };
         case "h8":
-          return { ...cell, figure: { img: blackRook, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "rook", img: blackRook, color: "black" },
+          };
         case "c1":
           return {
             ...cell,
-            figure: { img: whiteBishop, color: "figure-white" },
+            figure: { name: "bishop", img: whiteBishop, color: "white" },
           };
         case "f1":
           return {
             ...cell,
-            figure: { img: whiteBishop, color: "figure-white" },
+            figure: { name: "bishop", img: whiteBishop, color: "white" },
           };
         case "c8":
           return {
             ...cell,
-            figure: { img: blackBishop, color: "figure-black" },
+            figure: { name: "bishop", img: blackBishop, color: "black" },
           };
         case "f8":
           return {
             ...cell,
-            figure: { img: blackBishop, color: "figure-black" },
+            figure: { name: "bishop", img: blackBishop, color: "black" },
           };
         case "b1":
           return {
             ...cell,
-            figure: { img: whiteKnight, color: "figure-white" },
+            figure: { name: "knight", img: whiteKnight, color: "white" },
           };
         case "g1":
           return {
             ...cell,
-            figure: { img: whiteKnight, color: "figure-white" },
+            figure: { name: "knight", img: whiteKnight, color: "white" },
           };
         case "b8":
           return {
             ...cell,
-            figure: { img: blackKnight, color: "figure-black" },
+            figure: { name: "knight", img: blackKnight, color: "black" },
           };
         case "g8":
           return {
             ...cell,
-            figure: { img: blackKnight, color: "figure-black" },
+            figure: { name: "knight", img: blackKnight, color: "black" },
           };
         case "a2":
-          return { ...cell, figure: { img: whitePawn, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: whitePawn, color: "white" },
+          };
         case "b2":
-          return { ...cell, figure: { img: whitePawn, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: whitePawn, color: "white" },
+          };
         case "c2":
-          return { ...cell, figure: { img: whitePawn, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: whitePawn, color: "white" },
+          };
         case "d2":
-          return { ...cell, figure: { img: whitePawn, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: whitePawn, color: "white" },
+          };
         case "e2":
-          return { ...cell, figure: { img: whitePawn, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: whitePawn, color: "white" },
+          };
         case "f2":
-          return { ...cell, figure: { img: whitePawn, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: whitePawn, color: "white" },
+          };
         case "g2":
-          return { ...cell, figure: { img: whitePawn, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: whitePawn, color: "white" },
+          };
         case "h2":
-          return { ...cell, figure: { img: whitePawn, color: "figure-white" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: whitePawn, color: "white" },
+          };
         case "a7":
-          return { ...cell, figure: { img: blackPawn, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: blackPawn, color: "black" },
+          };
         case "b7":
-          return { ...cell, figure: { img: blackPawn, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: blackPawn, color: "black" },
+          };
         case "c7":
-          return { ...cell, figure: { img: blackPawn, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: blackPawn, color: "black" },
+          };
         case "d7":
-          return { ...cell, figure: { img: blackPawn, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: blackPawn, color: "black" },
+          };
         case "e7":
-          return { ...cell, figure: { img: blackPawn, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: blackPawn, color: "black" },
+          };
         case "f7":
-          return { ...cell, figure: { img: blackPawn, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: blackPawn, color: "black" },
+          };
         case "g7":
-          return { ...cell, figure: { img: blackPawn, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: blackPawn, color: "black" },
+          };
         case "h7":
-          return { ...cell, figure: { img: blackPawn, color: "figure-black" } };
+          return {
+            ...cell,
+            figure: { name: "pawn", img: blackPawn, color: "black" },
+          };
         default:
-          return { ...cell, figure: { img: null, color: "" } };
+          return { ...cell, figure: { name: null, img: null, color: "" } };
       }
     })
   );

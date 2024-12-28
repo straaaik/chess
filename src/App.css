@@ -4,13 +4,37 @@
 }
 
 #root {
-  background: rgb(43, 33, 24);
+  background: rgb(71, 68, 72);
 }
 .header {
   width: 100%;
   height: 50px;
   background-color: rgb(201, 205, 208);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.menu {
+  display: flex;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.helps {
+  font-family: "Russo One", serif;
+  color: rgb(83, 75, 82);
+  text-transform: uppercase;
+  font-size: 15px;
+  position: absolute;
+  top: 52%;
+  padding: 5px;
+}
+
 .body-chess {
   margin: 0;
   display: flex;
@@ -23,61 +47,74 @@
 .settings {
   width: 100px;
   height: 812px;
-  background-color: rgba(90, 228, 157, 0.327);
+  border-radius: 10px;
+  background-color: rgba(45, 35, 46);
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
 }
 .board {
   display: flex;
   flex-wrap: wrap;
-  width: 512px;
-  height: 512px;
+  margin: 10px;
+  width: 672px;
+  height: 672px;
   user-select: none;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 84px;
+  height: 84px;
+  background-color: azure;
 }
 
 .white {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 64px;
-  height: 64px;
-  background-color: rgba(237, 197, 176, 0.8);
+  background-color: rgba(241, 240, 234);
 }
 
 .black {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 64px;
-  height: 64px;
-  background: rgba(30, 15, 13, 0.8);
+  background: rgba(83, 75, 82);
 }
 
-.figure-black {
+.figure {
   background-color: transparent;
-  width: 45px;
-  height: 45px;
-  cursor: grab;
-}
-.figure-white {
-  background-color: transparent;
-  width: 45px;
-  height: 45px;
+  width: 70px;
+  height: 70px;
   cursor: grab;
 }
 
 .id {
+  margin-left: 2px;
   display: flex;
+  align-items: center;
+  flex-direction: column;
   position: absolute;
   z-index: 1;
-  color: brown;
+  font-family: "Poppins", serif;
+  font-size: 12px;
+  color: rgb(0, 0, 0);
 }
 
 .lose-board {
-  margin: 50px;
-  background: rgba(82, 49, 11, 0.664);
-  width: 512px;
-  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  background: rgba(224, 221, 207);
+  width: 150px;
+  height: 672px;
+  user-select: none;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+.lose-board img {
+  margin: 5px;
+  height: 25px;
+  width: 25px;
 }
 
 .id-str {

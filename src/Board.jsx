@@ -7,7 +7,9 @@ export default function Board() {
   const [board, setBoard] = useState(createBoard);
   const [memoryCell, setMemoryCell] = useState();
   const [memoryBoard, setMemoryBoard] = useState();
-  const [motion, setMotion] = useState("Нажмите кнопку начать игру");
+  const [motion, setMotion] = useState();
+  const [loseBlack, setLoseBlack] = useState([]);
+  const [loseWhite, setLoseWhite] = useState([]);
 
   function createBoard() {
     const newBoard = [];
@@ -24,13 +26,13 @@ export default function Board() {
             newLine.push({
               id: { id: char + (j + 1), char: char, num: j + 1 },
               color: "white",
-              figure: { img: null, color: "" },
+              figure: { img: null, color: null, name: null },
             });
           } else {
             newLine.push({
               id: { id: char + (j + 1), char: char, num: j + 1 },
               color: "black",
-              figure: { img: null, color: "" },
+              figure: { img: null, color: null, name: null },
             });
           }
         } else {
@@ -38,13 +40,13 @@ export default function Board() {
             newLine.push({
               id: { id: char + (j + 1), char: char, num: j + 1 },
               color: "black",
-              figure: { img: null, color: "" },
+              figure: { img: null, color: null, name: null },
             });
           } else {
             newLine.push({
               id: { id: char + (j + 1), char: char, num: j + 1 },
               color: "white",
-              figure: { img: null, color: "" },
+              figure: { img: null, color: null, name: null },
             });
           }
         }
@@ -54,22 +56,6 @@ export default function Board() {
     }
     return newBoard;
   }
-
-  // function canMotion(color) {
-  //   if (motion == "белые") {
-  //     if (color == "black") {
-  //       return false;
-  //     }
-  //     setMotion("черные");
-  //   }
-  //   if (motion == "черные") {
-  //     if (color == "white") {
-  //       return false;
-  //     }
-  //     setMotion("белые");
-  //     return true;
-  //   }
-  // }
 
   const dragStartHandler = (e, cell) => {
     const newBoard = board.map((inLine) =>
@@ -88,34 +74,16 @@ export default function Board() {
     e.target.style.background = "";
     e.target.parentElement.style.background = "";
   };
-  const dragOverHandler = (e) => {
+  const dragOverHandler = (e, cell) => {
     e.preventDefault();
-    //Белые фигуры
-    if (
-      memoryCell.figure.color == "figure-white" &&
-      e.target.className == "figure-black"
-    )
-      e.target.parentElement.style.background = "rgba(90, 233, 159, 0.858)";
 
-    if (
-      memoryCell.figure.color == "figure-white" &&
-      e.target.className == "figure-white"
-    )
-      e.target.parentElement.style.background = "rgba(233, 90, 119, 0.858)";
-    //Черные фигуры
-    if (
-      memoryCell.figure.color == "figure-black" &&
-      e.target.className == "figure-white"
-    )
-      e.target.parentElement.style.background = "rgba(90, 233, 159, 0.858)";
-    if (
-      memoryCell.figure.color == "figure-black" &&
-      e.target.className == "figure-black"
-    )
-      e.target.parentElement.style.background = "rgba(233, 90, 119, 0.858)";
-    //Остальные случаи
-    if (e.target.className == "black" || e.target.className == "white")
-      e.target.style.background = "rgba(90, 188, 233, 0.858)";
+    if (cell.figure.name == null) {
+      e.target.style.background = "rgba(101, 235, 68, 0.858)";
+    } else if (memoryCell.figure.color !== cell.figure.color) {
+      e.target.parentElement.style.background = "rgba(101, 235, 68, 0.858)";
+    } else if (memoryCell.figure.color === cell.figure.color) {
+      e.target.parentElement.style.background = "rgba(235, 68, 101, 0.858)";
+    }
   };
 
   const dragLeaveHandler = (e) => {
@@ -124,10 +92,13 @@ export default function Board() {
   };
 
   const dropHandler = (e, cell) => {
+    console.log(1);
     e.preventDefault();
-    if (memoryCell.figure.color == e.target.className) {
+    if (memoryCell.figure.color == cell.figure.color) {
       console.log("Нельзя побить свою фигуру");
+      setMotion(memoryCell.figure.color);
     } else {
+      console.log(2);
       const newBoard = memoryBoard.map((inLine) =>
         inLine.map((inCell) => {
           if (inCell.id.id === cell.id.id) {
@@ -137,49 +108,51 @@ export default function Board() {
           }
         })
       );
+      setMotion((color) => (color === "white" ? "black" : "white"));
       setBoard(newBoard);
+
+      if (cell.figure.color == "black") {
+        const c = cell.figure.name + cell.figure.color;
+        console.log(c);
+        setLoseBlack([...loseBlack, cell]);
+      } else if (cell.figure.color == "white") {
+        const c = cell.figure.name + cell.figure.color;
+        setLoseWhite([...loseWhite, cell]);
+        console.log(c);
+      }
     }
-    setMotion(memoryCell.figure.color);
     e.target.style.background = "";
     e.target.parentElement.style.background = "";
   };
 
-  const colorFigure = (color) => {
-    if (color == "figure-white") {
-      return "figure-white";
-    } else if (color == "figure-black") {
-      return "figure-black";
-    } else {
-      return "";
-    }
-  };
-
-  const canMotion = (figure) => {
-    if (motion == "figure-white" && figure == "figure-black") {
-      return true;
-    } else if (motion == "figure-black" && figure == "figure-white") {
+  function canMotion(figure) {
+    if (motion == figure.color) {
       return true;
     } else {
       return false;
     }
-  };
+  }
 
   function startGame() {
     setBoard(startPosition);
-    setMotion("figure-black");
+    setMotion("white");
+    setLoseBlack([]);
+    setLoseWhite([]);
   }
+
+  const text = () => {
+    if (motion == "white") {
+      return "Ходят белые";
+    } else if (motion == "black") {
+      return "Ходят черные";
+    } else {
+      return motion;
+    }
+  };
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
+    <div className="main">
       <GameSettings start={startGame} />
       <div className="body-chess">
-        <div>{motion}</div>
-        <div className="lose-board"></div>
         <div className="board">
           {board.map((line) =>
             line.map((cell) => (
@@ -193,19 +166,18 @@ export default function Board() {
                   </div>
                 </div>
                 <div
-                  className={cell.color}
+                  className={"cell " + cell.color}
                   onDragLeave={(e) => dragLeaveHandler(e)}
-                  onDragOver={(e) => dragOverHandler(e)}
+                  onDragOver={(e) => dragOverHandler(e, cell)}
                   onDrop={(e) => dropHandler(e, cell)}
                 >
                   <img
                     onDragStart={(e) => dragStartHandler(e, cell)}
                     onDragLeave={(e) => dragLeaveHandler(e)}
                     onDragEnd={(e) => dragEndHandler(e)}
-                    onDragOver={(e) => dragOverHandler(e)}
-                    onDrop={(e) => dropHandler(e, cell)}
-                    draggable={canMotion(cell.figure.color)}
-                    className={colorFigure(cell.figure.color)}
+                    onDragOver={(e) => dragOverHandler(e, cell)}
+                    draggable={canMotion(cell.figure)}
+                    className={cell.figure.name == null ? "" : "figure"}
                     src={cell.figure.img}
                     alt=""
                   />
@@ -214,7 +186,34 @@ export default function Board() {
             ))
           )}
         </div>
-        <div className="lose-board"></div>
+      </div>
+      <div className="lose-board">
+        <div>
+          {loseWhite.map((cell) => (
+            <img
+              key={Math.random()}
+              src={cell.figure.img}
+              alt=""
+              draggable={false}
+            />
+          ))}
+        </div>
+        <h1
+          className="helps"
+          style={motion && { border: "2px solid rgb(83, 75, 82)" }}
+        >
+          {text()}
+        </h1>
+        <div>
+          {loseBlack.map((cell) => (
+            <img
+              key={Math.random()}
+              src={cell.figure.img}
+              alt=""
+              draggable={false}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
