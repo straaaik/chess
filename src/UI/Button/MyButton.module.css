@@ -1,8 +1,10 @@
 .MyButton {
+  font-family: "Zen Kaku Gothic New", serif;
+  font-size: 20px;
   padding: 5px 15px;
-  color: rgb(136, 202, 235);
+  color: rgba(224, 221, 207);
   background-color: transparent;
   border-radius: 10px;
-  border: 2px solid rgb(136, 202, 235);
+  /* border: 2px solid rgba(224, 221, 207); */
   cursor: pointer;
 }

@@ -5,8 +5,8 @@ export default function Header() {
     <div className="header">
       <div className="logo">LOGO</div>
       <div className="menu">
-        <div>Шахматы</div>
-        <div>Крестики-Нолики</div>
+        <div className="nav">Шахматы</div>
+        <div className="nav">Крестики-Нолики</div>
       </div>
     </div>
   );

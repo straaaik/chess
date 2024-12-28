@@ -92,13 +92,11 @@ export default function Board() {
   };
 
   const dropHandler = (e, cell) => {
-    console.log(1);
     e.preventDefault();
     if (memoryCell.figure.color == cell.figure.color) {
       console.log("Нельзя побить свою фигуру");
       setMotion(memoryCell.figure.color);
     } else {
-      console.log(2);
       const newBoard = memoryBoard.map((inLine) =>
         inLine.map((inCell) => {
           if (inCell.id.id === cell.id.id) {
