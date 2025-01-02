@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { startPosition } from "./CreatePosition";
 import GameSettings from "../GameSettings";
 import { createBoard } from "./src/createBoard";
@@ -10,6 +10,7 @@ export default function Board() {
   const [motion, setMotion] = useState();
   const [loseFigure, setLoseFigure] = useState([]);
   const [mov, setMov] = useState([]);
+  const boardRef = useRef(null);
 
   // ------------- Drag-N-Drop ---------------
 
@@ -17,7 +18,6 @@ export default function Board() {
     setMemoryBoard(board);
     const movement = cell.figure.movement(cell, board);
     setMov(movement);
-    console.log(cell.figure.name);
     const newBoard = board.map((newLine) =>
       newLine.map((newCell) => {
         if (movement.some((target) => target == newCell.id)) {
@@ -50,6 +50,17 @@ export default function Board() {
   };
 
   const dragEndHandler = (e) => {
+    const boardElement = boardRef.current;
+    const boardRect = boardElement.getBoundingClientRect();
+
+    const isInsideBoard =
+      e.clientX >= boardRect.left &&
+      e.clientX <= boardRect.right &&
+      e.clientY >= boardRect.top &&
+      e.clientY <= boardRect.bottom;
+
+    !isInsideBoard && setBoard(memoryBoard);
+
     e.target.style.boxShadow = "";
     e.target.parentElement.style.boxShadow = "";
   };
@@ -98,7 +109,6 @@ export default function Board() {
         }
       })
     );
-
     setBoard(newBoard);
 
     e.target.style.boxShadow = "";
@@ -134,7 +144,7 @@ export default function Board() {
     <div className="main">
       <GameSettings start={startGame} />
       <div className="body-chess">
-        <div className="board">
+        <div ref={boardRef} className="board">
           {board.map((line) =>
             line.map((cell) => (
               <div key={cell.id}>
