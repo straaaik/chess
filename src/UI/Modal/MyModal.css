@@ -1,0 +1,35 @@
+.modal {
+  opacity: 0;
+  transition: 0.5s;
+  pointer-events: none;
+  width: 672px;
+  height: 672px;
+  background-color: #504b4ba7;
+  position: fixed;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.modal__content {
+  border-radius: 5px;
+  font-size: 30px;
+  scale: 0;
+  transition: 0.5s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 200px;
+  width: 320px;
+  background-color: rgba(224, 221, 207);
+  color: black;
+}
+
+.modal__content.active {
+  scale: 1;
+}

@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { startPosition } from "./CreatePosition";
 import GameSettings from "../GameSettings";
 import { createBoard } from "./src/createBoard";
+import MyModal from "../UI/Modal/MyModal";
+import MyButton from "../UI/Button/MyButton";
 
 export default function Board() {
   const [board, setBoard] = useState(createBoard);
@@ -11,6 +13,7 @@ export default function Board() {
   const [loseFigure, setLoseFigure] = useState([]);
   const [mov, setMov] = useState([]);
   const boardRef = useRef(null);
+  const [active, setActive] = useState(false);
 
   // ------------- Drag-N-Drop ---------------
 
@@ -86,6 +89,10 @@ export default function Board() {
   const dropHandler = (e, cell) => {
     e.preventDefault();
     const canMove = mov.some((id) => id === cell.id);
+    if (cell.figure.name == "king" && cell.figure.color != motion) {
+      setActive(true);
+      console.log("Выиграли " + motion);
+    }
 
     const newBoard = memoryBoard.map((newLine) =>
       newLine.map((newCell) => {
@@ -129,13 +136,14 @@ export default function Board() {
     setBoard(startPosition);
     setMotion("white");
     setLoseFigure([]);
+    setActive(false);
   }
 
   const text = () => {
     if (motion == "white") {
-      return "Ходят белые";
+      return "Белые";
     } else if (motion == "black") {
-      return "Ходят черные";
+      return "Черные";
     } else {
       return motion;
     }
@@ -144,6 +152,10 @@ export default function Board() {
     <div className="main">
       <GameSettings start={startGame} />
       <div className="body-chess">
+        <MyModal active={active} setActive={setActive}>
+          {text()} проиграли
+          <MyButton onClick={startGame}>Начать новую игру</MyButton>
+        </MyModal>
         <div ref={boardRef} className="board">
           {board.map((line) =>
             line.map((cell) => (
