@@ -24,7 +24,6 @@ function movPaw(cell, board, max) {
       const a = x + dx * i - cell.x.charCodeAt(0); // проверка для двух клеток
       if (isFigure.length && newX == cell.x) {
       } else if (isFigure.length && newX !== cell.x && a !== 2 && a !== -2) {
-        console.log(x + dx * i - cell.x.charCodeAt(0));
         targetCells.push(newX + newY);
       } else if (newX == cell.x) {
         targetCells.push(newX + newY);
