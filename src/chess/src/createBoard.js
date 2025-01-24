@@ -16,6 +16,7 @@ export function createBoard() {
             y: j + 1,
             color: "white",
             active: false,
+            target: false,
             figure: { img: null, color: null, name: null, movement: null },
           });
         } else {
@@ -25,6 +26,7 @@ export function createBoard() {
             y: j + 1,
             color: "black",
             active: false,
+            target: false,
             figure: { img: null, color: null, name: null, movement: null },
           });
         }
@@ -36,6 +38,7 @@ export function createBoard() {
             y: j + 1,
             color: "black",
             active: false,
+            target: false,
             figure: { img: null, color: null, name: null, movement: null },
           });
         } else {
@@ -45,6 +48,7 @@ export function createBoard() {
             y: j + 1,
             color: "white",
             active: false,
+            target: false,
             figure: { img: null, color: null, name: null, movement: null },
           });
         }

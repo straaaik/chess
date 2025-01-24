@@ -37,15 +37,15 @@ export default function Board() {
           else {
             return {
               ...newCell,
+              active: false,
             };
           }
         }
-
-        if (newCell == cell) {
-          return { ...newCell, color: "blue" };
-        } else {
-          return { ...newCell };
+        if (newCell.id == cell.id) {
+          return { ...newCell, active: true };
         }
+
+        return { ...newCell, active: false };
       })
     );
     setBoard(newBoard);
@@ -63,27 +63,19 @@ export default function Board() {
       e.clientY <= boardRect.bottom;
 
     !isInsideBoard && setBoard(memoryBoard);
-
-    e.target.style.boxShadow = "";
-    e.target.parentElement.style.boxShadow = "";
+    if (e.target.children.length) e.target.children[0].classList.remove("over");
   };
 
   const dragOverHandler = (e, cell) => {
     e.preventDefault();
 
-    if (cell.figure.name == null) {
-      e.target.style.boxShadow = "inset 0 0 3px 15px rgba(0, 0, 0, 0.253)";
-    } else if (memoryCell.figure.color !== cell.figure.color) {
-      e.target.parentElement.style.boxShadow =
-        "inset 0 0 3px 15px rgba(0, 0, 0, 0.253)";
-    } else if (memoryCell.figure.color === cell.figure.color) {
-      e.target.parentElement.style.boxShadow = "";
+    if (cell.figure.name == null && cell.active) {
+      e.target.children[0].classList.add("over");
     }
   };
 
   const dragLeaveHandler = (e) => {
-    e.target.style.boxShadow = "";
-    e.target.parentElement.style.boxShadow = "";
+    if (e.target.children.length) e.target.children[0].classList.remove("over");
   };
 
   const dropHandler = (e, cell) => {
@@ -101,103 +93,36 @@ export default function Board() {
           (newCell.id !== cell.id && !canMove) ||
           memoryCell.figure.color == cell.figure.color
         ) {
-          return { ...newCell };
+          return { ...newCell, active: false };
         } else if (newCell.id == cell.id && canMove) {
           setMotion((color) => (color === "white" ? "black" : "white"));
           setLoseFigure([...loseFigure, cell]);
-          return { ...newCell, figure: memoryCell.figure };
+          return { ...newCell, active: false, figure: memoryCell.figure };
         } else if (newCell.id == memoryCell.id) {
           memoryCell.figure.firstStep = false;
           return {
             ...newCell,
+            active: false,
             figure: { img: null, color: null, name: null },
           };
         } else {
-          return { ...newCell };
+          return { ...newCell, active: false };
         }
       })
     );
     setBoard(newBoard);
 
-    e.target.style.boxShadow = "";
-    e.target.parentElement.style.boxShadow = "";
+    if (e.target.children.length) e.target.children[0].classList.remove("over");
   };
 
   // -------------------CLICK------------------------
-  const clickStartMotion = (e, cell, board) => {
-    setMemoryBoard(board);
-    const movement = cell.figure.movement(cell, board);
-    setMov(movement);
-    const newBoard = board.map((newLine) =>
-      newLine.map((newCell) => {
-        if (movement.some((target) => target == newCell.id)) {
-          if (newCell.figure.name == null) {
-            return {
-              ...newCell,
-              active: true,
-            };
-          } else if (newCell.figure.color !== cell.figure.color)
-            return {
-              ...newCell,
-              active: true,
-            };
-          else {
-            return {
-              ...newCell,
-            };
-          }
-        }
-
-        return { ...newCell, active: false };
-      })
-    );
-    setBoard(newBoard);
-    setMemoryCell(cell);
-  };
-
-  const clickEndMotion = (cell) => {
-    const canMove = mov.some((id) => id === cell.id);
-    if (cell.figure.name == "king" && cell.figure.color != motion) {
-      setActive(true);
-      console.log("Выиграли " + motion);
-    }
-
-    const newBoard = memoryBoard.map((newLine) =>
-      newLine.map((newCell) => {
-        if (
-          (newCell.id !== cell.id && !canMove) ||
-          memoryCell.figure.color == cell.figure.color
-        ) {
-          return { ...newCell };
-        } else if (newCell.id == cell.id && canMove) {
-          setMotion((color) => (color === "white" ? "black" : "white"));
-          setLoseFigure([...loseFigure, cell]);
-
-          return { ...newCell, figure: memoryCell.figure };
-        } else if (newCell.id == memoryCell.id) {
-          memoryCell.figure.firstStep = false;
-          return {
-            ...newCell,
-            figure: { img: null, color: null, name: null },
-          };
-        } else if (cell.id !== memoryCell.id) {
-          return { ...newCell, active: false };
-        } else {
-          return { ...newCell, active: false };
-        }
-      })
-    );
-    setBoard(newBoard);
-  };
 
   function click(e, cell, board) {
     if (canMotion(cell.figure)) {
-      console.log(1);
-      clickStartMotion(e, cell, board);
+      dragStartHandler(e, cell, board);
     }
-    if (cell.active && !motion) {
-      console.log(2);
-      clickEndMotion(cell);
+    if (cell.active) {
+      dropHandler(e, cell);
     }
   }
 
@@ -227,6 +152,16 @@ export default function Board() {
       return motion;
     }
   };
+
+  const checkClass = (cell) => {
+    if (cell.active && cell.figure.color == motion) {
+      return "target";
+    } else if (cell.active && cell.figure.name == null) {
+      return "active";
+    } else if (cell.active && cell.figure.color != motion) {
+      return "target-attack";
+    }
+  };
   return (
     <div className="main">
       <GameSettings start={startGame} />
@@ -253,15 +188,7 @@ export default function Board() {
                   onDragOver={(e) => dragOverHandler(e, cell)}
                   onDrop={(e) => dropHandler(e, cell)}
                 >
-                  <div
-                    className={
-                      cell.active && cell.figure.name == null
-                        ? "active"
-                        : "" || (cell.active && cell.figure.name != null)
-                        ? "red"
-                        : ""
-                    }
-                  ></div>
+                  <div className={checkClass(cell)}></div>
                   <img
                     onDragStart={(e) => dragStartHandler(e, cell, board)}
                     onDragLeave={(e) => dragLeaveHandler(e)}

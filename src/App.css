@@ -87,26 +87,42 @@
   background: rgba(83, 75, 82);
 }
 
-.blue {
-  background: rgba(0, 105, 252, 0.14);
-}
-
-.green {
-  box-shadow: inset 0 0 10px 10px rgba(3, 222, 29, 0.253);
-}
-.red {
-  /* z-index: 999; */
+.target-attack {
+  pointer-events: none;
   justify-content: center;
   position: fixed;
   width: 84px;
   height: 84px;
   background: rgba(222, 3, 47, 0.253);
 }
+.target {
+  pointer-events: none;
+  justify-content: center;
+  position: fixed;
+  width: 84px;
+  height: 84px;
+  background: rgba(0, 105, 252, 0.14);
+}
 .active {
+  pointer-events: none;
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: grey;
+}
+.active:hover {
+  pointer-events: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgb(231, 12, 12);
+}
+.over {
+  pointer-events: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgb(231, 12, 12);
 }
 
 .figure {
@@ -145,9 +161,4 @@
   margin: 5px;
   height: 25px;
   width: 25px;
-}
-
-.id-str {
-}
-.id-num {
 }
