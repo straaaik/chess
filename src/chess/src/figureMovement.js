@@ -142,6 +142,7 @@ export function bishop(cell, board) {
 }
 
 export function king(cell, board) {
+  // Побили - игра закончилась
   return [
     ...movVertical(cell, board, 2),
     ...movHorizontal(cell, board, 2),

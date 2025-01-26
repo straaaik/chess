@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 #root {
@@ -97,6 +98,7 @@
 }
 .target {
   pointer-events: none;
+  z-index: 1;
   justify-content: center;
   position: fixed;
   width: 84px;
@@ -110,15 +112,7 @@
   border-radius: 50%;
   background: grey;
 }
-.active:hover {
-  pointer-events: none;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: rgb(231, 12, 12);
-}
-.over {
-  pointer-events: none;
+.hover {
   width: 15px;
   height: 15px;
   border-radius: 50%;
@@ -126,6 +120,7 @@
 }
 
 .figure {
+  z-index: 2;
   background-color: transparent;
   width: 70px;
   height: 70px;

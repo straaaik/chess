@@ -4,6 +4,7 @@ import GameSettings from "../GameSettings";
 import { createBoard } from "./src/createBoard";
 import MyModal from "../UI/Modal/MyModal";
 import MyButton from "../UI/Button/MyButton";
+import { king } from "./src/figureMovement";
 
 export default function Board() {
   const [board, setBoard] = useState(createBoard);
@@ -14,6 +15,8 @@ export default function Board() {
   const [mov, setMov] = useState([]);
   const boardRef = useRef(null);
   const [active, setActive] = useState(false);
+  const [hovered, setHovered] = useState(null);
+  const [target, setTarget] = useState([]);
 
   // ------------- Drag-N-Drop ---------------
 
@@ -21,9 +24,17 @@ export default function Board() {
     setMemoryBoard(board);
     const movement = cell.figure.movement(cell, board);
     setMov(movement);
+    const arrTarget = [];
     const newBoard = board.map((newLine) =>
       newLine.map((newCell) => {
-        if (movement.some((target) => target == newCell.id)) {
+        if (
+          movement.some((target) => {
+            if (!arrTarget.includes(target)) {
+              arrTarget.push(target);
+            }
+            return target == newCell.id;
+          })
+        ) {
           if (newCell.figure.name == null) {
             return {
               ...newCell,
@@ -48,6 +59,7 @@ export default function Board() {
         return { ...newCell, active: false };
       })
     );
+    setTarget(arrTarget);
     setBoard(newBoard);
     setMemoryCell(cell);
   };
@@ -63,19 +75,21 @@ export default function Board() {
       e.clientY <= boardRect.bottom;
 
     !isInsideBoard && setBoard(memoryBoard);
-    if (e.target.children.length) e.target.children[0].classList.remove("over");
+    if (e.target.children.length)
+      e.target.children[0].classList.remove("hover");
   };
 
   const dragOverHandler = (e, cell) => {
     e.preventDefault();
 
     if (cell.figure.name == null && cell.active) {
-      e.target.children[0].classList.add("over");
+      e.target.children[0].classList.add("hover");
     }
   };
 
   const dragLeaveHandler = (e) => {
-    if (e.target.children.length) e.target.children[0].classList.remove("over");
+    if (e.target.children.length)
+      e.target.children[0].classList.remove("hover");
   };
 
   const dropHandler = (e, cell) => {
@@ -112,7 +126,8 @@ export default function Board() {
     );
     setBoard(newBoard);
 
-    if (e.target.children.length) e.target.children[0].classList.remove("over");
+    if (e.target.children.length)
+      e.target.children[0].classList.remove("hover");
   };
 
   // -------------------CLICK------------------------
@@ -154,6 +169,10 @@ export default function Board() {
   };
 
   const checkClass = (cell) => {
+    if (cell.id == hovered && cell.active && cell.figure.name == null) {
+      return "hover";
+    }
+
     if (cell.active && cell.figure.color == motion) {
       return "target";
     } else if (cell.active && cell.figure.name == null) {
@@ -182,6 +201,8 @@ export default function Board() {
                 </div>
 
                 <div
+                  onMouseEnter={() => setHovered(cell.id)}
+                  onMouseLeave={() => setHovered(null)}
                   onClick={(e) => click(e, cell, board)}
                   className={"cell " + cell.color}
                   onDragLeave={(e) => dragLeaveHandler(e)}
