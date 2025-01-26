@@ -16,7 +16,8 @@ export default function Board() {
   const boardRef = useRef(null);
   const [active, setActive] = useState(false);
   const [hovered, setHovered] = useState(null);
-  const [target, setTarget] = useState([]);
+  // const [target, setTarget] = useState([]);
+  const [cacheCell, setCacheCell] = useState([]);
 
   // ------------- Drag-N-Drop ---------------
 
@@ -29,9 +30,9 @@ export default function Board() {
       newLine.map((newCell) => {
         if (
           movement.some((target) => {
-            if (!arrTarget.includes(target)) {
-              arrTarget.push(target);
-            }
+            // if (!arrTarget.includes(target)) {
+            //   arrTarget.push(target);
+            // }
             return target == newCell.id;
           })
         ) {
@@ -59,12 +60,12 @@ export default function Board() {
         return { ...newCell, active: false };
       })
     );
-    setTarget(arrTarget);
+    // setTarget(arrTarget);
     setBoard(newBoard);
     setMemoryCell(cell);
   };
 
-  const dragEndHandler = (e) => {
+  const dragEndHandler = (e, cell) => {
     const boardElement = boardRef.current;
     const boardRect = boardElement.getBoundingClientRect();
 
@@ -77,11 +78,19 @@ export default function Board() {
     !isInsideBoard && setBoard(memoryBoard);
     if (e.target.children.length)
       e.target.children[0].classList.remove("hover");
+    if (e.target.parentElement.children.length)
+      e.target.parentElement.children[0].classList.remove("hover-attack");
   };
 
   const dragOverHandler = (e, cell) => {
     e.preventDefault();
-
+    if (
+      cell.active &&
+      cell.figure.color != motion &&
+      cell.figure.name != null
+    ) {
+      e.target.parentElement.children[0].classList.add("hover-attack");
+    }
     if (cell.figure.name == null && cell.active) {
       e.target.children[0].classList.add("hover");
     }
@@ -90,10 +99,14 @@ export default function Board() {
   const dragLeaveHandler = (e) => {
     if (e.target.children.length)
       e.target.children[0].classList.remove("hover");
+    if (e.target.parentElement.children.length)
+      e.target.parentElement.children[0].classList.remove("hover-attack");
   };
 
   const dropHandler = (e, cell) => {
     e.preventDefault();
+    console.log(memoryCell.id, cell.id);
+
     const canMove = mov.some((id) => id === cell.id);
 
     if (cell.figure.name == "king" && cell.figure.color != motion) {
@@ -169,8 +182,22 @@ export default function Board() {
   };
 
   const checkClass = (cell) => {
+    if (cell.id == hovered && cell.active && cell.figure.color == motion) {
+      return "hover-active";
+    }
+    if (
+      cell.id == hovered &&
+      cell.figure.name != null &&
+      cell.figure.color == motion
+    ) {
+      return "target";
+    }
     if (cell.id == hovered && cell.active && cell.figure.name == null) {
       return "hover";
+    }
+
+    if (cell.id == hovered && cell.active && cell.figure.color != motion) {
+      return "hover-attack";
     }
 
     if (cell.active && cell.figure.color == motion) {
@@ -205,15 +232,15 @@ export default function Board() {
                   onMouseLeave={() => setHovered(null)}
                   onClick={(e) => click(e, cell, board)}
                   className={"cell " + cell.color}
-                  onDragLeave={(e) => dragLeaveHandler(e)}
+                  onDragLeave={(e) => dragLeaveHandler(e, cell)}
                   onDragOver={(e) => dragOverHandler(e, cell)}
                   onDrop={(e) => dropHandler(e, cell)}
                 >
                   <div className={checkClass(cell)}></div>
                   <img
                     onDragStart={(e) => dragStartHandler(e, cell, board)}
-                    onDragLeave={(e) => dragLeaveHandler(e)}
-                    onDragEnd={(e) => dragEndHandler(e)}
+                    onDragLeave={(e) => dragLeaveHandler(e, cell)}
+                    onDragEnd={(e) => dragEndHandler(e, cell)}
                     onDragOver={(e) => dragOverHandler(e, cell)}
                     draggable={canMotion(cell.figure)}
                     className={cell.figure.name == null ? "" : "figure"}
