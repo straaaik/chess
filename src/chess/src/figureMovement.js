@@ -1,3 +1,5 @@
+const regExp = /[a-h][1-8]/;
+
 function movPaw(cell, board, max) {
   const x = cell.x.charCodeAt(0);
   const y = cell.y;
@@ -22,11 +24,13 @@ function movPaw(cell, board, max) {
         )
         .filter((cell) => cell !== undefined);
       const a = x + dx * i - cell.x.charCodeAt(0); // проверка для двух клеток
-      if (isFigure.length && newX == cell.x) {
-      } else if (isFigure.length && newX !== cell.x && a !== 2 && a !== -2) {
-        targetCells.push(newX + newY);
-      } else if (newX == cell.x) {
-        targetCells.push(newX + newY);
+      if (regExp.test(newX + newY)) {
+        if (isFigure.length && newX == cell.x) {
+        } else if (isFigure.length && newX !== cell.x && a !== 2 && a !== -2) {
+          targetCells.push(newX + newY);
+        } else if (newX == cell.x) {
+          targetCells.push(newX + newY);
+        }
       }
     }
   }
@@ -59,11 +63,13 @@ function movVertical(cell, board, max) {
           )
         )
         .filter((cell) => cell !== undefined);
-      if (isFigure.length) {
-        targetCells.push(newX + newY);
-        break;
-      } else {
-        targetCells.push(newX + newY);
+      if (regExp.test(newX + newY)) {
+        if (isFigure.length) {
+          targetCells.push(newX + newY);
+          break;
+        } else {
+          targetCells.push(newX + newY);
+        }
       }
     }
   }
@@ -89,11 +95,13 @@ function movHorizontal(cell, board, max) {
           )
         )
         .filter((cell) => cell !== undefined);
-      if (isFigure.length) {
-        targetCells.push(newX + newY);
-        break;
-      } else {
-        targetCells.push(newX + newY);
+      if (regExp.test(newX + newY)) {
+        if (isFigure.length) {
+          targetCells.push(newX + newY);
+          break;
+        } else {
+          targetCells.push(newX + newY);
+        }
       }
     }
   }
@@ -122,11 +130,13 @@ function movDiagonal(cell, board, max) {
           )
         )
         .filter((cell) => cell !== undefined);
-      if (isFigure.length) {
-        targetCells.push(newX + newY);
-        break;
-      } else {
-        targetCells.push(newX + newY);
+      if (regExp.test(newX + newY)) {
+        if (isFigure.length) {
+          targetCells.push(newX + newY);
+          break;
+        } else {
+          targetCells.push(newX + newY);
+        }
       }
     }
   }
@@ -175,11 +185,13 @@ export function knight(cell, board) {
           )
         )
         .filter((cell) => cell !== undefined);
-      if (isFigure.length) {
-        targetCells.push(newX + newY);
-        break;
-      } else {
-        targetCells.push(newX + newY);
+      if (regExp.test(newX + newY)) {
+        if (isFigure.length) {
+          targetCells.push(newX + newY);
+          break;
+        } else {
+          targetCells.push(newX + newY);
+        }
       }
     }
   }

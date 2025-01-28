@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { startPosition } from "./CreatePosition";
 import GameSettings from "../GameSettings";
 import { createBoard } from "./src/createBoard";
 import MyModal from "../UI/Modal/MyModal";
 import MyButton from "../UI/Button/MyButton";
-import { king } from "./src/figureMovement";
 
 export default function Board() {
   const [board, setBoard] = useState(createBoard);
@@ -16,23 +15,21 @@ export default function Board() {
   const boardRef = useRef(null);
   const [active, setActive] = useState(false);
   const [hovered, setHovered] = useState(null);
-  // const [target, setTarget] = useState([]);
   const [cacheCell, setCacheCell] = useState([]);
 
   // ------------- Drag-N-Drop ---------------
 
   const dragStartHandler = (e, cell, board) => {
     setMemoryBoard(board);
+
     const movement = cell.figure.movement(cell, board);
+
     setMov(movement);
-    const arrTarget = [];
+
     const newBoard = board.map((newLine) =>
       newLine.map((newCell) => {
         if (
           movement.some((target) => {
-            // if (!arrTarget.includes(target)) {
-            //   arrTarget.push(target);
-            // }
             return target == newCell.id;
           })
         ) {
@@ -60,7 +57,7 @@ export default function Board() {
         return { ...newCell, active: false };
       })
     );
-    // setTarget(arrTarget);
+
     setBoard(newBoard);
     setMemoryCell(cell);
   };
@@ -105,7 +102,20 @@ export default function Board() {
 
   const dropHandler = (e, cell) => {
     e.preventDefault();
-    console.log(memoryCell.id, cell.id);
+    cell.id != memoryCell.id && cell.active && setCacheCell([cell, memoryCell]);
+
+    const arrTarget = board // массив всех возможных ходов
+      .map((line) =>
+        line.map((cell) => {
+          if (memoryCell.figure.color == motion) {
+            return memoryCell.figure.movement?.(cell, board);
+          }
+        })
+      )
+      .flat(2)
+      .filter((res) => res != undefined);
+    const arr = [...new Set(arrTarget)].sort();
+    console.log(arr);
 
     const canMove = mov.some((id) => id === cell.id);
 
@@ -116,6 +126,16 @@ export default function Board() {
 
     const newBoard = memoryBoard.map((newLine) =>
       newLine.map((newCell) => {
+        if (
+          arr.some(
+            (id) =>
+              id == newCell.id &&
+              newCell.figure.name == "king" &&
+              newCell.figure.color != motion
+          )
+        ) {
+          console.log("ШАХ", newCell.id);
+        }
         if (
           (newCell.id !== cell.id && !canMove) ||
           memoryCell.figure.color == cell.figure.color
@@ -202,10 +222,18 @@ export default function Board() {
 
     if (cell.active && cell.figure.color == motion) {
       return "target";
-    } else if (cell.active && cell.figure.name == null) {
+    }
+    if (cell.active && cell.figure.name == null) {
       return "active";
-    } else if (cell.active && cell.figure.color != motion) {
+    }
+    if (cell.active && cell.figure.color != motion) {
       return "target-attack";
+    }
+    if (
+      cacheCell.map((cell) => cell.id).includes(cell.id) &&
+      cacheCell.length == 2
+    ) {
+      return "cache";
     }
   };
   return (

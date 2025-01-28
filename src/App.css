@@ -89,6 +89,7 @@
 }
 
 .target-attack {
+  transition: 0.15s;
   pointer-events: none;
   justify-content: center;
   position: absolute;
@@ -115,10 +116,13 @@
 }
 
 .cache {
+  transition: 0.15s;
+  pointer-events: none;
   position: fixed;
-  width: 84px;
-  height: 84px;
-  background: rgba(227, 139, 7, 0.521);
+  width: 60px;
+  height: 60px;
+  background: rgba(216, 175, 63, 0.311);
+  box-shadow: 0px 0px 10px 8px rgba(216, 175, 63, 0.311);
 }
 .target {
   transition: 0.15s;
@@ -131,6 +135,7 @@
   background: rgba(0, 105, 252, 0.305);
 }
 .active {
+  transition: 0.15s;
   pointer-events: none;
   width: 22px;
   height: 22px;
