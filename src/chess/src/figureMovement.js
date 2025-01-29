@@ -1,4 +1,4 @@
-const regExp = /[a-h][1-8]/;
+const regExp = /^[a-h][1-8]$/;
 
 function movPaw(cell, board, max) {
   const x = cell.x.charCodeAt(0);

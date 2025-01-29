@@ -16,20 +16,29 @@ export default function Board() {
   const [active, setActive] = useState(false);
   const [hovered, setHovered] = useState(null);
   const [cacheCell, setCacheCell] = useState([]);
+  const [attackCells, setAttackCells] = useState([]);
 
   // ------------- Drag-N-Drop ---------------
 
   const dragStartHandler = (e, cell, board) => {
     setMemoryBoard(board);
 
-    const movement = cell.figure.movement(cell, board);
+    const movement = () => {
+      if (cell.figure.name == "king") {
+        return cell.figure
+          .movement(cell, board)
+          .filter((item) => !attackCells.includes(item));
+      } else {
+        return cell.figure.movement(cell, board);
+      }
+    };
 
-    setMov(movement);
+    setMov(movement());
 
     const newBoard = board.map((newLine) =>
       newLine.map((newCell) => {
         if (
-          movement.some((target) => {
+          movement().some((target) => {
             return target == newCell.id;
           })
         ) {
@@ -38,23 +47,24 @@ export default function Board() {
               ...newCell,
               active: true,
             };
-          } else if (newCell.figure.color !== cell.figure.color)
+          } else if (newCell.figure.color !== cell.figure.color) {
             return {
               ...newCell,
               active: true,
             };
-          else {
+          } else {
             return {
               ...newCell,
               active: false,
+              target: false,
             };
           }
         }
         if (newCell.id == cell.id) {
-          return { ...newCell, active: true };
+          return { ...newCell, target: true };
         }
 
-        return { ...newCell, active: false };
+        return { ...newCell, active: false, target: false };
       })
     );
 
@@ -100,22 +110,10 @@ export default function Board() {
       e.target.parentElement.children[0].classList.remove("hover-attack");
   };
 
-  const dropHandler = (e, cell) => {
+  const dropHandler = (e, cell, board) => {
     e.preventDefault();
-    cell.id != memoryCell.id && cell.active && setCacheCell([cell, memoryCell]);
 
-    const arrTarget = board // массив всех возможных ходов
-      .map((line) =>
-        line.map((cell) => {
-          if (memoryCell.figure.color == motion) {
-            return memoryCell.figure.movement?.(cell, board);
-          }
-        })
-      )
-      .flat(2)
-      .filter((res) => res != undefined);
-    const arr = [...new Set(arrTarget)].sort();
-    console.log(arr);
+    cell.id != memoryCell.id && cell.active && setCacheCell([cell, memoryCell]);
 
     const canMove = mov.some((id) => id === cell.id);
 
@@ -123,38 +121,60 @@ export default function Board() {
       setActive(true);
       console.log("Выиграли " + motion);
     }
-
-    const newBoard = memoryBoard.map((newLine) =>
+    let newBoard = memoryBoard.map((newLine) =>
       newLine.map((newCell) => {
         if (
-          arr.some(
+          (newCell.id !== cell.id && !canMove) ||
+          memoryCell.figure.color == cell.figure.color
+        ) {
+          return { ...newCell, active: false, target: false };
+        } else if (newCell.id == cell.id && canMove) {
+          setMotion((color) => (color === "white" ? "black" : "white"));
+          setLoseFigure([...loseFigure, cell]);
+          return {
+            ...newCell,
+            active: false,
+            target: false,
+            figure: memoryCell.figure,
+          };
+        } else if (newCell.id == memoryCell.id) {
+          memoryCell.figure.firstStep = false;
+          return {
+            ...newCell,
+            active: false,
+            target: false,
+            check: false,
+            figure: { img: null, color: null, name: null },
+          };
+        } else {
+          return { ...newCell, active: false, target: false };
+        }
+      })
+    );
+    const attackCells = newBoard
+      .map((newLine) =>
+        newLine.map((newCell) => {
+          if (newCell.figure.color == motion) {
+            return newCell.figure.movement?.(newCell, board);
+          }
+        })
+      )
+      .flat(2)
+      .filter((cell) => cell !== undefined);
+    setAttackCells(attackCells);
+    newBoard = newBoard.map((newLine) =>
+      newLine.map((newCell) => {
+        if (
+          attackCells.some(
             (id) =>
               id == newCell.id &&
               newCell.figure.name == "king" &&
               newCell.figure.color != motion
           )
         ) {
-          console.log("ШАХ", newCell.id);
+          return { ...newCell, check: true };
         }
-        if (
-          (newCell.id !== cell.id && !canMove) ||
-          memoryCell.figure.color == cell.figure.color
-        ) {
-          return { ...newCell, active: false };
-        } else if (newCell.id == cell.id && canMove) {
-          setMotion((color) => (color === "white" ? "black" : "white"));
-          setLoseFigure([...loseFigure, cell]);
-          return { ...newCell, active: false, figure: memoryCell.figure };
-        } else if (newCell.id == memoryCell.id) {
-          memoryCell.figure.firstStep = false;
-          return {
-            ...newCell,
-            active: false,
-            figure: { img: null, color: null, name: null },
-          };
-        } else {
-          return { ...newCell, active: false };
-        }
+        return { ...newCell };
       })
     );
     setBoard(newBoard);
@@ -170,7 +190,7 @@ export default function Board() {
       dragStartHandler(e, cell, board);
     }
     if (cell.active) {
-      dropHandler(e, cell);
+      dropHandler(e, cell, board);
     }
   }
 
@@ -220,7 +240,7 @@ export default function Board() {
       return "hover-attack";
     }
 
-    if (cell.active && cell.figure.color == motion) {
+    if (cell.target && cell.figure.color == motion) {
       return "target";
     }
     if (cell.active && cell.figure.name == null) {
@@ -234,6 +254,9 @@ export default function Board() {
       cacheCell.length == 2
     ) {
       return "cache";
+    }
+    if (cell.check) {
+      return "target-attack";
     }
   };
   return (
@@ -262,7 +285,7 @@ export default function Board() {
                   className={"cell " + cell.color}
                   onDragLeave={(e) => dragLeaveHandler(e, cell)}
                   onDragOver={(e) => dragOverHandler(e, cell)}
-                  onDrop={(e) => dropHandler(e, cell)}
+                  onDrop={(e) => dropHandler(e, cell, board)}
                 >
                   <div className={checkClass(cell)}></div>
                   <img
